@@ -1,0 +1,255 @@
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* ── Popup ─────────────────────────────────────────────────────────────────── */
+
+body:not(.options-body) {
+  width: 300px;
+}
+
+.popup-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header row: title + settings gear */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #2c3e50;
+}
+
+/* Gear icon button — opens Options page */
+.options-icon-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #95a5a6;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s, background-color 0.2s;
+}
+.options-icon-btn:hover {
+  color: #2c3e50;
+  background-color: #ecf0f1;
+}
+
+/* Status row */
+.status-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #bdc3c7;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: background-color 0.3s;
+}
+.status-indicator.active {
+  background-color: #e74c3c;
+  /* Pulse animation when recording */
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.status-text {
+  font-size: 13px;
+  color: #7f8c8d;
+}
+
+/* Recording timer */
+.recording-timer {
+  font-size: 22px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: #e74c3c;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+/* Record toggle button */
+.record-button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background-color: #3498db;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.25s, transform 0.15s;
+  margin-bottom: 10px;
+}
+.record-button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+.record-button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.record-button.recording {
+  background-color: #e74c3c;
+}
+.record-button.recording:hover {
+  background-color: #c0392b;
+}
+.record-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Upload status strip */
+.upload-status {
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  min-height: 18px;
+  margin-bottom: 8px;
+  color: transparent; /* hidden when empty */
+}
+.upload-status.ok {
+  color: #27ae60;
+}
+.upload-status.error {
+  color: #e67e22;
+}
+
+/* Dashboard link */
+.dashboard-link {
+  width: 100%;
+  text-align: center;
+  margin-top: 4px;
+}
+.dashboard-button {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 13px;
+}
+.dashboard-button:hover {
+  text-decoration: underline;
+}
+
+/* ── Options Page ──────────────────────────────────────────────────────────── */
+
+.options-body {
+  background-color: #f9f9f9;
+  min-width: 460px;
+  padding: 32px;
+}
+
+.options-container {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.options-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 28px 0;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #ecf0f1;
+}
+
+.options-group {
+  margin-bottom: 22px;
+}
+
+.options-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.options-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid #dde2e8;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  outline: none;
+}
+.options-input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.options-hint {
+  font-size: 12px;
+  color: #95a5a6;
+  margin: 5px 0 0 0;
+}
+
+.options-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.options-save-btn {
+  padding: 9px 22px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.options-save-btn:hover {
+  background-color: #2980b9;
+}
+
+.options-save-status {
+  font-size: 13px;
+  color: transparent;
+  margin: 0;
+  transition: color 0.2s;
+}
+.options-save-status.ok {
+  color: #27ae60;
+}
+.options-save-status.error {
+  color: #e74c3c;
+}

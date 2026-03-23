@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>LectaSafe Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="options-body">
+    <div class="options-container">
+
+      <h1 class="options-title">LectaSafe Settings</h1>
+
+      <div class="options-group">
+        <label for="server-url" class="options-label">Transcription Server URL</label>
+        <input
+          id="server-url"
+          type="text"
+          class="options-input"
+          placeholder="http://localhost:3000"
+          spellcheck="false"
+        />
+        <p class="options-hint">The URL of your /transcribe endpoint.</p>
+      </div>
+
+      <div class="options-group">
+        <label for="api-key" class="options-label">API Key</label>
+        <input
+          id="api-key"
+          type="password"
+          class="options-input"
+          placeholder="Enter new key to update..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <p class="options-hint">
+          Leave blank to keep the existing key. Your key is stored locally and
+          never included in source code.
+        </p>
+      </div>
+
+      <div class="options-actions">
+        <button id="save-btn" class="options-save-btn">Save Settings</button>
+        <p id="save-status" class="options-save-status"></p>
+      </div>
+
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

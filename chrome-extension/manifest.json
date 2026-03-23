@@ -1,12 +1,27 @@
 {
   "manifest_version": 3,
   "name": "LectaSafe Recorder",
+  "description": "Captures and transcribes tab audio in real time.",
   "version": "1.0",
-  "permissions": ["tabCapture", "storage", "offscreen"],
+  "permissions": [
+    "tabCapture",
+    "storage",
+    "offscreen",
+    "tabs",
+    "alarms"
+  ],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
     "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "host_permissions": [
+    "http://localhost:3000/*",
+    "https://*/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'none';"
   }
 }
