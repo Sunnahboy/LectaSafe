@@ -3,50 +3,56 @@ A local-first, fail-safe audio transcription and AI-summarization ecosystem for 
 ```
 LectaSafe/
 │
-├── .github/                  # GitHub Actions workflows
-│   └── workflows/
-│       └── deploy.yml         # CI/CD pipeline
+├── .github/workflows/
+│   └── deploy.yml             # Automates compilation of WASM and deployment of static UI to edge CDNs
 │
-├── chrome-extension/          # Chrome extension for recording
-│   ├── manifest.json          # Extension manifest
-│   ├── background.js          # Background script
-│   ├── offscreen.html         # Offscreen document for recording
-│   ├── popup.html             # Extension popup UI
-│   ├── popup.js               # Popup logic
-│   └── styles.css             # Popup styles
+├── packages/                  # Workspace boundaries for clean separation of concerns
 │
-├── rust-api/                  # Rust API (Axum + Supabase)
-│   ├── Cargo.toml              # Rust dependencies
-│   ├── src/
-│   │   ├── main.rs             # API entry point
-│   │   ├── routes/             # API routes
-│   │   │   ├── transcribe.rs   # Transcription logic
-│   │   │   ├── summarize.rs    # Summarization logic
-│   │   │   └── vault.rs        # Lecture history logic
-│   │   ├── models/              # Data models
-│   │   │   └── lecture.rs      # Lecture structs
-│   │   └── utils/               # Utility functions
-│   │       └── llama.rs         # Custom LLM bindings
-│   └── Dockerfile              # Docker config for API
+│   ├── chrome-extension/      # The browser native runtime boundary (Manifest V3)
+│   │   ├── manifest.json      # Configured with permissions: 'tabCapture', 'storage', 'offscreen'
+│   │   ├── background.ts      # Extension lifecycle; manages lifecycle of the Offscreen Document
+│   │   ├── popup/             # Lightweight quick-action toolbar interface
+│   │   │   ├── index.html
+│   │   │   └── popup.ts
+│   │   └── offscreen/         # High-priority hidden canvas/audio engine
+│   │       ├── offscreen.html
+│   │       ├── offscreen.ts   # Instantiates AudioContext and WebAudio capture
+│   │       └── audio-worklet.ts # Low-level PCM audio downsampling worker (runs on native audio thread)
+│   │
+│   ├── local-kernel/          # Core computational engines compiled to the browser
+│   │   ├── Cargo.toml         # Configured with crate-type = ["cdylib"] for WASM targets
+│   │   └── src/
+│   │       ├── lib.rs         # WASM interface entry point using wasm-bindgen
+│   │       ├── graph/         # Algorithmic graph merger and deterministic layout engines
+│   │       │   ├── merger.rs  # MapReduce-style local JSON graph stitching
+│   │       │   └── layout.rs  # Graph layout generation pass
+│   │       └── utils/
+│   │           └── grammar.rs # Constraints to enforce valid JSON generation inside client LLMs
+│   │
+│   └── react-dashboard/       # The immersive interactive user workspace
+│       ├── public/            # Static assets
+│       │   └── models/        # Symlinks or configurations for downloading model weights dynamically
+│       ├── src/
+│       │   ├── api/           # Client abstractions for local hardware boundaries
+│       │   │   ├── dexie-db.ts # IndexedDB structural schema initialization and schema migrations
+│       │   │   ├── webgpu.ts  # Hardware capabilities profiling and tier allocation runtime
+│       │   │   └── models.ts  # Fetching/caching layer interacting with Hugging Face edge CDN
+│       │   ├── components/
+│       │   │   ├── Dashboard.tsx    # Bento-box layout container
+│       │   │   ├── CanvasGraph.tsx  # React Flow interactive mind map node system
+│       │   │   ├── EditorNotes.tsx  # Extracted structured Markdown editor component
+│       │   │   └── DeviceTierViewer.tsx # Status component showing VRAM/hardware efficiency diagnostics
+│       │   ├── workers/       # Off-main-thread heavy computational units
+│       │   │   ├── whisper.worker.ts # Drives local transcription via whisper.cpp WASM
+│       │   │   └─- reasoning.worker.ts # Drives Local Phi-3.5 or Gemini Nano inference
+│       │   ├── App.tsx
+│       │   └── main.tsx
+│       ├── package.json       # Manages React Flow, Dexie, and Transformers.js dependencies
+│       └── vite.config.ts     # Configured for custom WASM loading and SharedArrayBuffer security headers
 │
-├── react-dashboard/           # React frontend (Bento Box UI)
-│   ├── public/                # Static files
-│   ├── src/
-│   │   ├── components/         # React components
-│   │   │   ├── Dashboard.tsx   # Main dashboard
-│   │   │   ├── LectureView.tsx # Split-view for transcripts/notes
-│   │   │   └── RecordingControls.tsx # Recording UI
-│   │   ├── api.ts              # API client
-│   │   ├── App.tsx             # Root component
-│   │   └── index.css           # Tailwind CSS
-│   ├── package.json            # Node dependencies
-│   ├── tailwind.config.js      # Tailwind config
-│   └── Dockerfile              # Docker config for frontend
+├── docs/
+│   ├── ARCHITECTURE_WALKTHROUGH.md # Explains local thread messaging topology
+│   └── DATABASE_MIGRATIONS.md       # Strategies for client-side IndexedDB updates
 │
-├── docs/                       # Documentation
-│   ├── API_CONTRACT.md         # API endpoints and examples
-│   ├── SETUP_GUIDE.md          # How to set up the project
-│   └── DEPLOYMENT.md           # How to deploy
-│
-└── README.md                   # Project overview and instructions
+└── README.md
 
