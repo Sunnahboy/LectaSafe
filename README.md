@@ -6,6 +6,15 @@ LectaSafe/
 ├── .github/workflows/
 │   └── deploy.yml             # Automates compilation of WASM and deployment of static UI to edge CDNs
 │
+├── .cargo/                    # Global Cargo configurations
+│   └── config.toml            # Enforces target = "wasm32-unknown-unknown" and target-feature=+atomics
+│
+├── .vscode/                   # Integrated Development Environment configuration
+│   ├── settings.json          # Configures rust-analyzer project links and auto-formatting
+│   └── extensions.json        # Recommends mandatory team development extensions
+│
+├── package.json               # Root monorepo workspace configurations and global script runners
+│
 ├── packages/                  # Workspace boundaries for clean separation of concerns
 │
 │   ├── chrome-extension/      # The browser native runtime boundary (Manifest V3)
@@ -19,7 +28,7 @@ LectaSafe/
 │   │       ├── offscreen.ts   # Instantiates AudioContext and WebAudio capture
 │   │       └── audio-worklet.ts # Low-level PCM audio downsampling worker (runs on native audio thread)
 │   │
-│   ├── local-kernel/          # Core computational engines compiled to the browser
+│   ├── local-kernel/          # Core computational engines compiled to the browser via wasm-pack
 │   │   ├── Cargo.toml         # Configured with crate-type = ["cdylib"] for WASM targets
 │   │   └── src/
 │   │       ├── lib.rs         # WASM interface entry point using wasm-bindgen
@@ -48,11 +57,10 @@ LectaSafe/
 │       │   ├── App.tsx
 │       │   └── main.tsx
 │       ├── package.json       # Manages React Flow, Dexie, and Transformers.js dependencies
-│       └── vite.config.ts     # Configured for custom WASM loading and SharedArrayBuffer security headers
+│       └── vite.config.ts     # Configured for multi-entry compiling, custom WASM, and COOP/COEP headers
 │
 ├── docs/
 │   ├── ARCHITECTURE_WALKTHROUGH.md # Explains local thread messaging topology
 │   └── DATABASE_MIGRATIONS.md       # Strategies for client-side IndexedDB updates
 │
 └── README.md
-
